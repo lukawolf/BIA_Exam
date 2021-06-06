@@ -3,11 +3,10 @@ print("\\Clear");
 
 // Get working directories
 inputDir = getDirectory("Select the dataset directory");
-outputDir = getDirectory("Select the output directory");
-print("Input directory: " + inputDir + "\nOutput directory:" + outputDir);
+print("Dataset directory: " + inputDir);
 
 // Open an output csv and print out its header
-outputFile = File.open(outputDir + "results.tsv");
+outputFile = File.open(inputDir + "results.tsv");
 print(outputFile, "Image\tCount\n");
 
 // LOOP FILES
@@ -15,7 +14,9 @@ print(outputFile, "Image\tCount\n");
 imagesToProcess = getFileList(inputDir);
 for (i = 0; i < imagesToProcess.length; i++) { 
 	imageToProcess = imagesToProcess[i];
-	if (indexOf(imageToProcess, "/") != -1) continue;	
+	// Ignore subdirectories and the result file
+	if (indexOf(imageToProcess, "/") != -1) continue;
+	if (indexOf(imageToProcess, "results.tsv") != -1) continue;
     processImage(imageToProcess);        
 }
 
@@ -33,5 +34,5 @@ function processImage(imageToProcess) {
 	roiManager("Show All with labels");
 	nucleiCount = roiManager("count");
 	print("Image nuclei count: " + nucleiCount);
-	print(outputFile, imageToProcess + "\t" + nucleiCount + "\t\n");
+	print(outputFile, imageToProcess + "\t" + nucleiCount + "\n");
 }
